@@ -3,13 +3,25 @@ import { useState } from "react";
 function App() {
   const [task, setTask] = useState("");
   const [todos, setTodos] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
+  // Add / Update
   const addTask = () => {
-    if (task === "") return;
-    setTodos([...todos, task]);
+    if (task.trim() === "") return;
+
+    if (editIndex !== null) {
+      const updatedTodos = [...todos];
+      updatedTodos[editIndex] = task;
+      setTodos(updatedTodos);
+      setEditIndex(null);
+    } else {
+      setTodos([...todos, task]);
+    }
+
     setTask("");
   };
 
+  // Delete
   const deleteTask = (index) => {
     const updatedTodos = todos.filter((_, i) => i !== index);
     setTodos(updatedTodos);
@@ -26,12 +38,24 @@ function App() {
         onChange={(e) => setTask(e.target.value)}
       />
 
-      <button onClick={addTask}>Add</button>
+      <button onClick={addTask}>
+        {editIndex !== null ? "Update" : "Add"}
+      </button>
 
       <ul>
         {todos.map((todo, index) => (
           <li key={index}>
             {todo}
+
+            <button
+              onClick={() => {
+                setTask(todo);
+                setEditIndex(index);
+              }}
+            >
+              Edit
+            </button>
+
             <button onClick={() => deleteTask(index)}>Delete</button>
           </li>
         ))}
