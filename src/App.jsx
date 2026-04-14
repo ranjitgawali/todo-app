@@ -10,6 +10,11 @@ function App() {
     setTask("");
   };
 
+  const deleteTask = (index) => {
+    const updatedTodos = todos.filter((_, i) => i !== index);
+    setTodos(updatedTodos);
+  };
+
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>Todo App</h1>
@@ -25,7 +30,10 @@ function App() {
 
       <ul>
         {todos.map((todo, index) => (
-          <li key={index}>{todo}</li>
+          <li key={index}>
+            {todo}
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </li>
         ))}
       </ul>
     </div>
